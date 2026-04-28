@@ -23,8 +23,6 @@ export default {
         { src: 'versions.json', dest: exportFolder },
       ],
     }),
-    commonjs({
-      include: 'node_modules/ramda/**',
-    }),
+    commonjs(),
   ],
 };

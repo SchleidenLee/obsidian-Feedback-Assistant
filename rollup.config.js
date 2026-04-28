@@ -4,7 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 
 const exportFolder =
-  '.obsidian/plugins/obsidian-markdown-formatting-assistant-plugin';
+  '.obsidian/plugins/obsidian-feedback-assistant';
 export default {
   input: 'src/main.ts',
 
@@ -25,8 +25,6 @@ export default {
         { src: 'versions.json', dest: exportFolder },
       ],
     }),
-    commonjs({
-      include: 'node_modules/ramda/**',
-    }),
+    commonjs(),
   ],
 };
