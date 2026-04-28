@@ -1,6 +1,6 @@
 import { ItemView, MarkdownView, WorkspaceLeaf } from 'obsidian';
 import TextInsertPlugin from './main';
-import { feedbackTemplates, Category, Section } from './templates';
+import { feedbackTemplates, Category, Section, DisplayGroup, EvalDimension } from './templates';
 
 export const SidePanelControlViewType = 'feedback-assistant-view';
 
@@ -39,8 +39,6 @@ export class SidePanelControlView extends ItemView {
     const container = this.containerEl.children[1];
     const rootEl = document.createElement('div');
     rootEl.id = 'SidePaneRootElement';
-    rootEl.style.maxWidth = '300px';
-    rootEl.style.minWidth = '300px';
     rootEl.style.padding = '8px';
 
     this.drawTopTabs(rootEl);
@@ -131,12 +129,12 @@ export class SidePanelControlView extends ItemView {
 
     sectionsToShow.forEach((section) => {
       section.groups.forEach((group) => {
-        this.drawGroup(rootEl, section.label, group);
+        this.drawGroup(rootEl, group);
       });
     });
   }
 
-  private drawGroup(rootEl: HTMLElement, sectionLabel: string, group: { header: string; items: { label: string; text: string }[] }): void {
+  private drawGroup(rootEl: HTMLElement, group: DisplayGroup): void {
     const headerRow = rootEl.createDiv();
     headerRow.style.display = 'flex';
     headerRow.style.alignItems = 'center';
@@ -147,43 +145,96 @@ export class SidePanelControlView extends ItemView {
     const tag = headerRow.createDiv();
     tag.style.background = 'var(--interactive-accent)';
     tag.style.color = 'var(--text-on-accent)';
-    tag.style.fontSize = '11px';
+    tag.style.fontSize = '12px';
     tag.style.fontWeight = '600';
-    tag.style.padding = '1px 6px';
+    tag.style.padding = '2px 8px';
     tag.style.borderRadius = '3px';
-    tag.style.marginRight = '6px';
-    tag.setText(group.header);
+    tag.style.cursor = 'pointer';
+    tag.setText(group.header + ':');
 
-    const secTag = headerRow.createDiv();
-    secTag.style.color = 'var(--text-muted)';
-    secTag.style.fontSize = '10px';
-    secTag.setText(sectionLabel);
+    tag.onClickEvent(() => {
+      const insertText = group.typeName || group.header;
+      this.insertText(insertText);
+    });
 
-    const itemsPerRow = 3;
-    let row: HTMLElement = null;
+    if (group.dimensions) {
+      group.dimensions.forEach((dim) => {
+        this.drawDimension(rootEl, dim);
+      });
+    }
 
-    group.items.forEach((item, idx) => {
-      if (idx % itemsPerRow === 0) {
-        row = rootEl.createDiv({ cls: 'nav-buttons-container' });
-      }
+    if (group.items) {
+      group.items.forEach((item) => {
+        this.drawItemButton(rootEl, item);
+      });
+    }
 
-      const btn = row.createDiv({ cls: 'nav-action-button' });
+    rootEl.createDiv().style.height = '6px';
+  }
+
+  private drawDimension(rootEl: HTMLElement, dim: EvalDimension): void {
+    const dimRow = rootEl.createDiv();
+    dimRow.style.display = 'flex';
+    dimRow.style.alignItems = 'center';
+    dimRow.style.padding = '2px 4px';
+    dimRow.style.gap = '6px';
+
+    const dimLabel = dimRow.createDiv();
+    dimLabel.style.fontSize = '13px';
+    dimLabel.style.fontWeight = '600';
+    dimLabel.style.color = 'var(--text-normal)';
+    dimLabel.style.minWidth = '70px';
+    dimLabel.style.flexShrink = '0';
+    dimLabel.setText(dim.name + ':');
+
+    const btnContainer = dimRow.createDiv();
+    btnContainer.style.display = 'flex';
+    btnContainer.style.flexWrap = 'wrap';
+    btnContainer.style.gap = '3px';
+    btnContainer.style.flex = '1';
+
+    dim.items.forEach((item) => {
+      const btn = btnContainer.createDiv({ cls: 'nav-action-button' });
       btn.style.textAlign = 'center';
-      btn.style.padding = '6px 3px';
+      btn.style.padding = '4px 8px';
       btn.style.fontSize = '13px';
       btn.style.cursor = 'pointer';
       btn.style.borderRadius = '4px';
       btn.style.whiteSpace = 'nowrap';
-      btn.style.overflow = 'hidden';
-      btn.style.textOverflow = 'ellipsis';
       btn.appendText(item.label);
 
       btn.onClickEvent(() => {
         this.insertText(item.text);
       });
     });
+  }
 
-    rootEl.createDiv().style.height = '6px';
+  private drawItemButton(rootEl: HTMLElement, item: { label: string; text: string }): void {
+    const containers = Array.from(rootEl.querySelectorAll<HTMLElement>('.nav-buttons-container'));
+    let row: HTMLElement | null = containers.length > 0
+      ? containers[containers.length - 1]
+      : null;
+    if (!row || row.querySelectorAll('.nav-action-button').length >= 4) {
+      row = rootEl.createDiv({ cls: 'nav-buttons-container' });
+      row.style.display = 'flex';
+      row.style.flexWrap = 'wrap';
+      row.style.gap = '3px';
+    }
+
+    const btn = row.createDiv({ cls: 'nav-action-button' });
+    btn.style.textAlign = 'center';
+    btn.style.padding = '5px 8px';
+    btn.style.fontSize = '13px';
+    btn.style.cursor = 'pointer';
+    btn.style.borderRadius = '4px';
+    btn.style.flex = '1 1 auto';
+    btn.style.minWidth = '0';
+    btn.style.whiteSpace = 'nowrap';
+    btn.appendText(item.label);
+
+    btn.onClickEvent(() => {
+      this.insertText(item.text);
+    });
   }
 
   private insertText(text: string): void {

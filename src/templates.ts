@@ -3,9 +3,16 @@ export interface TemplateItem {
   text: string;
 }
 
+export interface EvalDimension {
+  name: string;
+  items: TemplateItem[];
+}
+
 export interface DisplayGroup {
   header: string;
-  items: TemplateItem[];
+  typeName?: string;
+  dimensions?: EvalDimension[];
+  items?: TemplateItem[];
 }
 
 export interface Section {
@@ -166,70 +173,115 @@ export const feedbackTemplates: Category[] = [
         id: "stu-questions",
         label: "题型",
         groups: [
-          { header: "填空通用", items: [
+          { header: "填空", typeName: "填空", items: [
             { label: "注意词数", text: "注意词数限制" },
-            { label: "词数做得好", text: "严格遵循词数限制" },
+            { label: "词数好", text: "严格遵循词数限制" },
             { label: "违反词数", text: "出现词数限制违反的情况" },
             { label: "词性预测好", text: "词性预测合理，有意识" },
-            { label: "词性有错误", text: "出现词性错误" },
+            { label: "词性错误", text: "出现词性错误" },
           ]},
-          { header: "表格/单句/笔记", items: [
-            { label: "表头定位好", text: "表头定位能力强" },
-            { label: "表头定位弱", text: "表头定位能力弱，容易混淆" },
-            { label: "语法掌握好", text: "简单句语法掌握好" },
-            { label: "语法掌握弱", text: "语法基础薄弱，需要加强" },
-            { label: "笔记好", text: "笔记填空完成好，信息捕捉准确" },
-            { label: "笔记弱", text: "笔记填空完成度不高，信息遗漏多" },
+          { header: "表头定位", typeName: "表格填空", items: [
+            { label: "好", text: "表头定位能力强" },
+            { label: "弱", text: "表头定位能力弱，容易混淆" },
           ]},
-          { header: "摘要填空", items: [
-            { label: "全对", text: "摘要填空全对，段落理解能力强" },
-            { label: "正确率好", text: "摘要填空正确率好，掌握度好" },
-            { label: "力不从心", text: "对高度改写的摘要填空力不从心，正确率不理想" },
-            { label: "排除法运用", text: "合理运用排除法" },
-            { label: "段落结构好", text: "段落结构识别定位能力强" },
-            { label: "段落结构弱", text: "段落结构识别定位能力弱" },
+          { header: "单句语法", typeName: "单句填空", items: [
+            { label: "好", text: "简单句语法掌握好" },
+            { label: "弱", text: "语法基础薄弱，需要加强" },
           ]},
-          { header: "地图/流程图", items: [
-            { label: "方位词掌握好", text: "方位词掌握好" },
-            { label: "方位词薄弱", text: "方位词薄弱，需要加强" },
-            { label: "流程图好", text: "流程图理解能力强" },
-            { label: "流程图弱", text: "流程图理解有困难" },
+          { header: "笔记填空", typeName: "笔记填空", items: [
+            { label: "好", text: "笔记填空完成好，信息捕捉准确" },
+            { label: "弱", text: "笔记填空完成度不高，信息遗漏多" },
           ]},
-          { header: "判断", items: [
-            { label: "考点清晰", text: "考点识别清晰，能准确判断" },
-            { label: "考点不清", text: "考点识别不清晰" },
-            { label: "有基础", text: "具备一定识别考点的能力" },
-            { label: "No/NG区分好", text: "No和NG区分能力强" },
-            { label: "No/NG混淆", text: "No和NG区分有问题，正确率待提升" },
-            { label: "依据充分", text: "判断依据充分，定位准确" },
-            { label: "依据不足", text: "判断依据不足，定位能力有待提高" },
-            { label: "定位好", text: "定位能力强" },
-            { label: "定位不足", text: "定位能力不足导致错误" },
-            { label: "无痕迹全对", text: "没有做题痕迹但全对了，要注意养成习惯" },
+          { header: "摘要填空", typeName: "摘要填空", dimensions: [
+            { name: "整体表现", items: [
+              { label: "全对", text: "摘要填空全对，段落理解能力强" },
+              { label: "正确率好", text: "摘要填空正确率好，掌握度好" },
+              { label: "力不从心", text: "对高度改写的摘要填空力不从心，正确率不理想" },
+            ]},
+            { name: "排除法", items: [
+              { label: "运用", text: "合理运用排除法" },
+              { label: "未运用", text: "排除法运用不够" },
+            ]},
+            { name: "段落结构", items: [
+              { label: "好", text: "段落结构识别定位能力强" },
+              { label: "弱", text: "段落结构识别定位能力弱" },
+            ]},
           ]},
-          { header: "选择", items: [
-            { label: "细节好", text: "细节题做得好，能抓住关键信息" },
-            { label: "主旨好", text: "主旨题做得好，能把握文章中心" },
-            { label: "区分好", text: "能区分细节题和主旨题" },
-            { label: "区分混淆", text: "细节题和主旨题容易混淆" },
+          { header: "地图/流程图", typeName: "地图/流程图填空", dimensions: [
+            { name: "方位词", items: [
+              { label: "好", text: "方位词掌握好" },
+              { label: "薄弱", text: "方位词薄弱，需要加强" },
+            ]},
+            { name: "流程图", items: [
+              { label: "好", text: "流程图理解能力强" },
+              { label: "有困难", text: "流程图理解有困难" },
+            ]},
           ]},
-          { header: "人名匹配", items: [
+          { header: "判断", typeName: "判断", dimensions: [
+            { name: "考点识别", items: [
+              { label: "清晰", text: "考点识别清晰，能准确判断" },
+              { label: "不清", text: "考点识别不清晰" },
+              { label: "有基础", text: "具备一定识别考点的能力" },
+            ]},
+            { name: "No/NG区分", items: [
+              { label: "好", text: "No和NG区分能力强" },
+              { label: "混淆", text: "No和NG区分有问题，正确率待提升" },
+            ]},
+            { name: "判断依据", items: [
+              { label: "充分", text: "判断依据充分，定位准确" },
+              { label: "不足", text: "判断依据不足，定位能力有待提高" },
+            ]},
+            { name: "定位", items: [
+              { label: "好", text: "定位能力强" },
+              { label: "不足", text: "定位能力不足导致错误" },
+            ]},
+            { name: "做题痕迹", items: [
+              { label: "无痕迹全对", text: "没有做题痕迹但全对了，要注意养成习惯" },
+            ]},
+          ]},
+          { header: "选择", typeName: "选择", dimensions: [
+            { name: "细节题", items: [
+              { label: "好", text: "细节题做得好，能抓住关键信息" },
+              { label: "弱", text: "细节题正确率偏低，需要加强" },
+            ]},
+            { name: "主旨题", items: [
+              { label: "好", text: "主旨题做得好，能把握文章中心" },
+              { label: "弱", text: "主旨题正确率偏低，需要加强" },
+            ]},
+            { name: "题型区分", items: [
+              { label: "清晰", text: "能区分细节题和主旨题" },
+              { label: "混淆", text: "细节题和主旨题容易混淆" },
+            ]},
+          ]},
+          { header: "人名配信息", typeName: "人名配信息", items: [
             { label: "好", text: "人名配信息完成好，细节信息识别准确" },
             { label: "弱", text: "人名配信息完成度不高" },
           ]},
-          { header: "段落匹配", items: [
-            { label: "关键词好", text: "关键词划分清晰，正确率好，能识别同义替换" },
-            { label: "关键词待提升", text: "关键词选的不好，不具有限定意义，正确率偏低" },
-            { label: "同义替换弱", text: "识别同义替换的能力能提高" },
-            { label: "细节识别好", text: "细节信息识别准确，题型特点掌握好" },
-            { label: "个别题优化", text: "个别题目关键词划分还有优化空间，总体表现好" },
-            { label: "完成好", text: "段落配信息完成好，正确率良好" },
+          { header: "段落配信息", typeName: "段落配信息", dimensions: [
+            { name: "关键词划分", items: [
+              { label: "好", text: "关键词划分清晰，正确率好，能识别同义替换" },
+              { label: "待提升", text: "关键词选的不好，不具有限定意义，正确率偏低" },
+            ]},
+            { name: "同义替换", items: [
+              { label: "好", text: "识别同义替换的能力强" },
+              { label: "弱", text: "识别同义替换的能力能提高" },
+            ]},
+            { name: "细节识别", items: [
+              { label: "好", text: "细节信息识别准确，题型特点掌握好" },
+              { label: "待提升", text: "细节信息识别能力需要提高" },
+            ]},
+            { name: "完成度", items: [
+              { label: "好", text: "段落配信息完成好，正确率良好" },
+              { label: "差", text: "段落配信息完成度不高" },
+            ]},
           ]},
-          { header: "半句/标题匹配", items: [
-            { label: "半句好", text: "半句匹配完成好，逻辑关系理解准确" },
-            { label: "半句弱", text: "半句匹配完成度不高，逻辑关系理解有困难" },
-            { label: "标题好", text: "段落配标题完成好，概括能力强" },
-            { label: "标题弱", text: "段落配标题完成度不高，概括能力有待提高" },
+          { header: "半句匹配", typeName: "半句匹配", items: [
+            { label: "好", text: "半句匹配完成好，逻辑关系理解准确" },
+            { label: "弱", text: "半句匹配完成度不高，逻辑关系理解有困难" },
+          ]},
+          { header: "标题匹配", typeName: "段落标题匹配", items: [
+            { label: "好", text: "段落配标题完成好，概括能力强" },
+            { label: "弱", text: "段落配标题完成度不高，概括能力有待提高" },
           ]},
         ],
       },
@@ -237,44 +289,70 @@ export const feedbackTemplates: Category[] = [
         id: "stu-skills",
         label: "技巧",
         groups: [
-          { header: "定位词划分", items: [
-            { label: "特殊词好", text: "特殊词识别利用能力强" },
-            { label: "特殊词弱", text: "特殊词识别利用能力弱" },
-            { label: "选词合理", text: "选词合理，定位准确" },
-            { label: "选词不合理", text: "选词不合理，定位效果不好" },
+          { header: "定位词划分", typeName: "定位词划分", dimensions: [
+            { name: "特殊词识别", items: [
+              { label: "好", text: "特殊词识别利用能力强" },
+              { label: "弱", text: "特殊词识别利用能力弱" },
+            ]},
+            { name: "选词", items: [
+              { label: "合理", text: "选词合理，定位准确" },
+              { label: "不合理", text: "选词不合理，定位效果不好" },
+            ]},
           ]},
-          { header: "关键词划分", items: [
-            { label: "好", text: "关键词划分合理清晰" },
-            { label: "模糊", text: "关键词划分模糊，不够精准" },
-            { label: "找参照物好", text: "找参照物能力强" },
-            { label: "找参照物弱", text: "找参照物能力弱" },
+          { header: "关键词划分", typeName: "关键词划分", dimensions: [
+            { name: "划分质量", items: [
+              { label: "好", text: "关键词划分合理清晰" },
+              { label: "模糊", text: "关键词划分模糊，不够精准" },
+            ]},
+            { name: "找参照物", items: [
+              { label: "好", text: "找参照物能力强" },
+              { label: "弱", text: "找参照物能力弱" },
+            ]},
           ]},
-          { header: "扫读", items: [
-            { label: "速度快", text: "扫读速度快，找关键词能力强" },
-            { label: "速度慢", text: "扫读速度慢，需要提升" },
-            { label: "找词强", text: "扫读找关键词能力强" },
-            { label: "找词弱", text: "扫读找关键词能力弱" },
+          { header: "扫读", typeName: "扫读", dimensions: [
+            { name: "速度", items: [
+              { label: "快", text: "扫读速度快，找关键词能力强" },
+              { label: "慢", text: "扫读速度慢，需要提升" },
+            ]},
+            { name: "找关键词", items: [
+              { label: "强", text: "扫读找关键词能力强" },
+              { label: "弱", text: "扫读找关键词能力弱" },
+            ]},
           ]},
-          { header: "略读/概括", items: [
-            { label: "掌握好", text: "略读方法掌握好，能快速把握主旨" },
-            { label: "待提升", text: "略读方法待提升，阅读效率不够" },
-            { label: "概括强", text: "总结概括能力强" },
-            { label: "概括弱", text: "总结概括能力弱，需要加强" },
+          { header: "略读", typeName: "略读", dimensions: [
+            { name: "方法", items: [
+              { label: "掌握好", text: "略读方法掌握好，能快速把握主旨" },
+              { label: "待提升", text: "略读方法待提升，阅读效率不够" },
+            ]},
+            { name: "总结概括", items: [
+              { label: "强", text: "总结概括能力强" },
+              { label: "弱", text: "总结概括能力弱，需要加强" },
+            ]},
           ]},
-          { header: "同义替换", items: [
-            { label: "简单好", text: "简单替换识别能力强" },
-            { label: "简单弱", text: "简单替换识别能力弱" },
-            { label: "改写好", text: "改写类替换识别能力强" },
-            { label: "改写弱", text: "改写类替换识别能力弱，对高度改写敏感" },
-            { label: "预测强", text: "同义替换预测能力强" },
-            { label: "预测弱", text: "同义替换预测能力弱" },
+          { header: "同义替换", typeName: "同义替换", dimensions: [
+            { name: "简单替换", items: [
+              { label: "好", text: "简单替换识别能力强" },
+              { label: "弱", text: "简单替换识别能力弱" },
+            ]},
+            { name: "改写类替换", items: [
+              { label: "好", text: "改写类替换识别能力强" },
+              { label: "弱", text: "改写类替换识别能力弱，对高度改写敏感" },
+            ]},
+            { name: "预测", items: [
+              { label: "强", text: "同义替换预测能力强" },
+              { label: "弱", text: "同义替换预测能力弱" },
+            ]},
           ]},
-          { header: "长难句", items: [
-            { label: "主干好", text: "能识别长难句主干" },
-            { label: "主干弱", text: "不太理解主干概念" },
-            { label: "理解强", text: "长难句理解能力强" },
-            { label: "理解吃力", text: "长难句理解吃力，阅读有困难" },
-            { label: "有进步", text: "长难句理解有进步" },
+          { header: "长难句", typeName: "长难句", dimensions: [
+            { name: "主干识别", items: [
+              { label: "好", text: "能识别长难句主干" },
+              { label: "弱", text: "不太理解主干概念" },
+            ]},
+            { name: "整体理解", items: [
+              { label: "强", text: "长难句理解能力强" },
+              { label: "吃力", text: "长难句理解吃力，阅读有困难" },
+              { label: "有进步", text: "长难句理解有进步" },
+            ]},
           ]},
         ],
       },
@@ -282,7 +360,7 @@ export const feedbackTemplates: Category[] = [
         id: "stu-mastery",
         label: "掌握",
         groups: [
-          { header: "语法", items: [
+          { header: "语法", typeName: "语法", items: [
             { label: "过硬", text: "语法非常过硬" },
             { label: "简单句好", text: "简单句的语法掌握得很好" },
             { label: "基础薄弱", text: "语法基础薄弱，需要加强" },
@@ -292,18 +370,24 @@ export const feedbackTemplates: Category[] = [
             { label: "有进步", text: "独立练习有很大进步，正确率保持高水平" },
             { label: "良好", text: "独立练习正确率良好，但速度不够快" },
           ]},
-          { header: "翻译", items: [
+          { header: "翻译", typeName: "翻译", items: [
             { label: "吃力", text: "翻译起来吃力" },
             { label: "慢", text: "单句翻译需要时间思考，考场上时间不够用" },
             { label: "有进步", text: "翻译能力有进步" },
             { label: "点名好", text: "点名的翻译做得很好" },
           ]},
-          { header: "词汇语感", items: [
-            { label: "语感好", text: "猜词做得很好，有点语感" },
-            { label: "基础弱", text: "词汇基础不够扎实" },
-            { label: "有进步", text: "词汇掌握有进步" },
+          { header: "词汇语感", typeName: "词汇语感", dimensions: [
+            { name: "猜词", items: [
+              { label: "好", text: "猜词做得很好，有点语感" },
+              { label: "弱", text: "猜词能力弱，语感不够" },
+            ]},
+            { name: "基础", items: [
+              { label: "扎实", text: "词汇基础扎实" },
+              { label: "薄弱", text: "词汇基础不够扎实" },
+              { label: "有进步", text: "词汇掌握有进步" },
+            ]},
           ]},
-          { header: "入门测", items: [
+          { header: "入门测", typeName: "入门测", items: [
             { label: "定位没问题", text: "填空题定位能力没有问题" },
             { label: "词汇良好", text: "词汇掌握良好" },
             { label: "正确率高", text: "表现良好，正确率高" },
@@ -348,9 +432,14 @@ export function getAllItems(): TemplateItem[] {
   feedbackTemplates.forEach((cat) => {
     cat.sections.forEach((sec) => {
       sec.groups.forEach((grp) => {
-        grp.items.forEach((item) => {
-          items.push(item);
-        });
+        if (grp.items) {
+          grp.items.forEach((item) => items.push(item));
+        }
+        if (grp.dimensions) {
+          grp.dimensions.forEach((dim) => {
+            dim.items.forEach((item) => items.push(item));
+          });
+        }
       });
     });
   });
