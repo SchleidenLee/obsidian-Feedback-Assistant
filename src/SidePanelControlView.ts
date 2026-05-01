@@ -1,6 +1,6 @@
 import { ItemView, MarkdownView, WorkspaceLeaf } from 'obsidian';
 import TextInsertPlugin from './main';
-import { feedbackTemplates, Category, Section, DisplayGroup, EvalDimension } from './templates';
+import { feedbackTemplates, Category, Section, DisplayGroup, EvalDimension, SubGroup } from './templates';
 
 export const SidePanelControlViewType = 'feedback-assistant-view';
 
@@ -58,7 +58,7 @@ export class SidePanelControlView extends ItemView {
       btn.style.flex = '1';
       btn.style.textAlign = 'center';
       btn.style.padding = '8px 0';
-      btn.style.fontSize = '15px';
+      btn.style.fontSize = '17px';
       btn.style.fontWeight = 'bold';
       btn.style.cursor = 'pointer';
       btn.style.borderRadius = '6px';
@@ -96,7 +96,7 @@ export class SidePanelControlView extends ItemView {
     cat.sections.forEach((sec, idx) => {
       const btn = subRow.createDiv();
       btn.style.padding = '4px 10px';
-      btn.style.fontSize = '12px';
+      btn.style.fontSize = '14px';
       btn.style.cursor = 'pointer';
       btn.style.borderRadius = '4px';
       btn.style.border = '1px solid var(--background-modifier-border)';
@@ -138,27 +138,45 @@ export class SidePanelControlView extends ItemView {
     const headerRow = rootEl.createDiv();
     headerRow.style.display = 'flex';
     headerRow.style.alignItems = 'center';
-    headerRow.style.padding = '6px 4px 2px';
+    headerRow.style.padding = '6px 4px 4px';
     headerRow.style.borderBottom = '1px solid var(--background-modifier-border)';
     headerRow.style.marginBottom = '4px';
 
     const tag = headerRow.createDiv();
     tag.style.background = 'var(--interactive-accent)';
     tag.style.color = 'var(--text-on-accent)';
-    tag.style.fontSize = '12px';
-    tag.style.fontWeight = '600';
-    tag.style.padding = '2px 8px';
-    tag.style.borderRadius = '3px';
+    tag.style.fontSize = '16px';
+    tag.style.fontWeight = '700';
+    tag.style.padding = '3px 10px';
+    tag.style.borderRadius = '4px';
     tag.style.cursor = 'pointer';
-    tag.setText(group.header + ':');
+    tag.setText(group.header);
 
     tag.onClickEvent(() => {
       const insertText = group.typeName || group.header;
       this.insertText(insertText);
     });
 
+    if (group.subgroups) {
+      group.subgroups.forEach((sub, idx) => {
+        if (idx > 0) {
+          const sep = rootEl.createDiv();
+          sep.style.borderTop = '1px dashed var(--background-modifier-border)';
+          sep.style.margin = '6px 0';
+        }
+        this.drawSubGroup(rootEl, sub);
+      });
+    }
+
     if (group.dimensions) {
+      let first = true;
       group.dimensions.forEach((dim) => {
+        if (!first) {
+          const sep = rootEl.createDiv();
+          sep.style.borderTop = '1px dashed var(--background-modifier-border)';
+          sep.style.margin = '4px 0';
+        }
+        first = false;
         this.drawDimension(rootEl, dim);
       });
     }
@@ -172,6 +190,40 @@ export class SidePanelControlView extends ItemView {
     rootEl.createDiv().style.height = '6px';
   }
 
+  private drawSubGroup(rootEl: HTMLElement, sub: SubGroup): void {
+    const subHeader = rootEl.createDiv();
+    subHeader.style.display = 'flex';
+    subHeader.style.alignItems = 'center';
+    subHeader.style.padding = '4px 4px 2px 8px';
+
+    const subTag = subHeader.createDiv();
+    subTag.style.background = 'var(--interactive-accent)';
+    subTag.style.color = 'var(--text-on-accent)';
+    subTag.style.fontSize = '15px';
+    subTag.style.fontWeight = '600';
+    subTag.style.padding = '3px 10px';
+    subTag.style.borderRadius = '4px';
+    subTag.style.display = 'inline-block';
+    subTag.style.cursor = 'pointer';
+    subTag.setText(sub.header);
+
+    subTag.onClickEvent(() => {
+      this.insertText(sub.header);
+    });
+
+    if (sub.dimensions) {
+      sub.dimensions.forEach((dim) => {
+        this.drawDimension(rootEl, dim);
+      });
+    }
+
+    if (sub.items) {
+      sub.items.forEach((item) => {
+        this.drawItemButton(rootEl, item);
+      });
+    }
+  }
+
   private drawDimension(rootEl: HTMLElement, dim: EvalDimension): void {
     const dimRow = rootEl.createDiv();
     dimRow.style.display = 'flex';
@@ -180,12 +232,14 @@ export class SidePanelControlView extends ItemView {
     dimRow.style.gap = '6px';
 
     const dimLabel = dimRow.createDiv();
-    dimLabel.style.fontSize = '13px';
-    dimLabel.style.fontWeight = '600';
+    dimLabel.style.fontSize = '14px';
+    dimLabel.style.fontWeight = '500';
     dimLabel.style.color = 'var(--text-normal)';
-    dimLabel.style.minWidth = '70px';
+    dimLabel.style.minWidth = dim.name ? '70px' : '0';
     dimLabel.style.flexShrink = '0';
-    dimLabel.setText(dim.name + ':');
+    if (dim.name) {
+      dimLabel.setText(dim.name + ':');
+    }
 
     const btnContainer = dimRow.createDiv();
     btnContainer.style.display = 'flex';
@@ -197,7 +251,7 @@ export class SidePanelControlView extends ItemView {
       const btn = btnContainer.createDiv({ cls: 'nav-action-button' });
       btn.style.textAlign = 'center';
       btn.style.padding = '4px 8px';
-      btn.style.fontSize = '13px';
+      btn.style.fontSize = '14px';
       btn.style.cursor = 'pointer';
       btn.style.borderRadius = '4px';
       btn.style.whiteSpace = 'nowrap';
@@ -224,7 +278,7 @@ export class SidePanelControlView extends ItemView {
     const btn = row.createDiv({ cls: 'nav-action-button' });
     btn.style.textAlign = 'center';
     btn.style.padding = '5px 8px';
-    btn.style.fontSize = '13px';
+    btn.style.fontSize = '15px';
     btn.style.cursor = 'pointer';
     btn.style.borderRadius = '4px';
     btn.style.flex = '1 1 auto';
