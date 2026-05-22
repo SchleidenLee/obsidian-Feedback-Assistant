@@ -74,7 +74,8 @@ export class SidePanelControlView extends ItemView {
 
       btn.onClickEvent(() => {
         this.active.categoryIdx = idx;
-        this.active.sectionIdx = null;
+        // Default to first section for better UX, especially for teaching content
+        this.active.sectionIdx = feedbackTemplates[idx].sections.length > 0 ? 0 : null;
         this.draw();
       });
     });
