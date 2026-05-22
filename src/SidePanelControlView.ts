@@ -195,8 +195,25 @@ export class SidePanelControlView extends ItemView {
     }
 
     if (hasItems) {
+      const itemWrapper = rootEl.createDiv();
+      itemWrapper.style.display = 'flex';
+      itemWrapper.style.flexWrap = 'wrap';
+      itemWrapper.style.gap = '3px';
       group.items.forEach((item) => {
-        this.drawItemButton(rootEl, item);
+        const btn = itemWrapper.createDiv({ cls: 'nav-action-button' });
+        btn.style.textAlign = 'center';
+        btn.style.padding = '5px 8px';
+        btn.style.fontSize = '15px';
+        btn.style.cursor = 'pointer';
+        btn.style.borderRadius = '4px';
+        btn.style.flex = '1 1 auto';
+        btn.style.minWidth = '80px';
+        btn.style.whiteSpace = 'nowrap';
+        btn.appendText(item.label);
+
+        btn.onClickEvent(() => {
+          this.insertText(item.text);
+        });
       });
     }
 
