@@ -135,29 +135,41 @@ export class SidePanelControlView extends ItemView {
   }
 
   private drawGroup(rootEl: HTMLElement, group: DisplayGroup): void {
-    const headerRow = rootEl.createDiv();
-    headerRow.style.display = 'flex';
-    headerRow.style.alignItems = 'center';
-    headerRow.style.padding = '6px 4px 4px';
-    headerRow.style.borderBottom = '1px solid var(--background-modifier-border)';
-    headerRow.style.marginBottom = '4px';
+    const hasSubgroups = group.subgroups && group.subgroups.length > 0;
+    const hasDimensions = group.dimensions && group.dimensions.length > 0;
+    const hasItems = group.items && group.items.length > 0;
 
-    const tag = headerRow.createDiv();
-    tag.style.background = 'var(--interactive-accent)';
-    tag.style.color = 'var(--text-on-accent)';
-    tag.style.fontSize = '16px';
-    tag.style.fontWeight = '700';
-    tag.style.padding = '3px 10px';
-    tag.style.borderRadius = '4px';
-    tag.style.cursor = 'pointer';
-    tag.setText(group.header);
+    // Only show header if there are subgroups or dimensions
+    // Pure item-only groups (like teaching content units) skip the header
+    if (hasSubgroups || hasDimensions) {
+      const headerRow = rootEl.createDiv();
+      headerRow.style.display = 'flex';
+      headerRow.style.alignItems = 'center';
+      headerRow.style.padding = '6px 4px 4px';
+      headerRow.style.borderBottom = '1px solid var(--background-modifier-border)';
+      headerRow.style.marginBottom = '4px';
 
-    tag.onClickEvent(() => {
-      const insertText = group.typeName || group.header;
-      this.insertText(insertText);
-    });
+      const tag = headerRow.createDiv();
+      tag.style.background = 'var(--interactive-accent)';
+      tag.style.color = 'var(--text-on-accent)';
+      tag.style.fontSize = '16px';
+      tag.style.fontWeight = '700';
+      tag.style.padding = '3px 10px';
+      tag.style.borderRadius = '4px';
+      tag.style.cursor = 'pointer';
+      tag.setText(group.header);
 
-    if (group.subgroups) {
+      tag.onClickEvent(() => {
+        if (group.items && group.items.length === 1) {
+          this.insertText(group.items[0].text);
+        } else {
+          const insertText = group.typeName || group.header;
+          this.insertText(insertText);
+        }
+      });
+    }
+
+    if (hasSubgroups) {
       group.subgroups.forEach((sub, idx) => {
         if (idx > 0) {
           const sep = rootEl.createDiv();
@@ -168,7 +180,7 @@ export class SidePanelControlView extends ItemView {
       });
     }
 
-    if (group.dimensions) {
+    if (hasDimensions) {
       let first = true;
       group.dimensions.forEach((dim) => {
         if (!first) {
@@ -181,7 +193,7 @@ export class SidePanelControlView extends ItemView {
       });
     }
 
-    if (group.items) {
+    if (hasItems) {
       group.items.forEach((item) => {
         this.drawItemButton(rootEl, item);
       });
