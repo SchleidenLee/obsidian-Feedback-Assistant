@@ -129,9 +129,41 @@ export class SidePanelControlView extends ItemView {
       : cat.sections;
 
     sectionsToShow.forEach((section) => {
-      section.groups.forEach((group) => {
-        this.drawGroup(rootEl, group);
-      });
+      // Check if this section is pure item-only (like teaching content)
+      const isPureItemSection = section.groups.every(
+        (g) => g.items && g.items.length > 0 && !g.subgroups && !g.dimensions
+      );
+
+      if (isPureItemSection) {
+        // Flatten all items into a single flex wrapper for grid layout
+        const wrapper = rootEl.createDiv();
+        wrapper.style.display = 'flex';
+        wrapper.style.flexWrap = 'wrap';
+        wrapper.style.gap = '3px';
+        section.groups.forEach((group) => {
+          group.items.forEach((item) => {
+            const btn = wrapper.createDiv({ cls: 'nav-action-button' });
+            btn.style.textAlign = 'center';
+            btn.style.padding = '5px 8px';
+            btn.style.fontSize = '15px';
+            btn.style.cursor = 'pointer';
+            btn.style.borderRadius = '4px';
+            btn.style.flex = '1 1 auto';
+            btn.style.minWidth = '80px';
+            btn.style.whiteSpace = 'nowrap';
+            btn.appendText(item.label);
+
+            btn.onClickEvent(() => {
+              this.insertText(item.text);
+            });
+          });
+        });
+        rootEl.createDiv().style.height = '6px';
+      } else {
+        section.groups.forEach((group) => {
+          this.drawGroup(rootEl, group);
+        });
+      }
     });
   }
 
