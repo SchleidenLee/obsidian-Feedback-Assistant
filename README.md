@@ -1,149 +1,70 @@
-> # PLUGIN NOT MAINTAINED anymore
-> If you want to takover the plugin, write me!
+# Obsidian Feedback Assistant
 
+一个用于**教学反馈撰写**的 Obsidian 插件。通过侧边栏面板或快捷键命令选择器，一键插入预定义的反馈文本片段，大幅减少重复输入，让老师可以专注于反馈内容本身。
 
+> 本插件基于 [obsidian-markdown-formatting-assistant](https://github.com/Reocin/obsidian-markdown-formatting-assistant-plugin) 改写而来，感谢原作者的工作。
 
-----
-# Obsidian Markdown Formatting Assistant
+## 功能特性
 
-> This Plugin provides easy to use snippets for Markdown, HTML and Latex and a color picker which shows the history of last used colors. Furthermore, it is possible to save any color you want.
-> Version 0.4.0
+### 侧边栏面板
 
-> If you find a Bug or have a feature request: https://github.com/Reocin/obsidian-markdown-formatting-assistant-plugin/issues
+通过左侧 Ribbon 图标打开面板，面板按三大类组织反馈模板：
 
-![](assets/Obsidian_Overview.png)
+| 分类 | 内容 |
+| ---- | ---- |
+| **班级** | 出勤、纪律、课堂氛围、课堂表现、作业情况、当堂练习（区分整体 / 个人维度） |
+| **学员** | 出勤、入门测（速度 / 质量）、课堂表现（参与度 / 认真程度 / 独立练习）、作业（提交状态 / 做题习惯 / 作业态度）、题型（填空、判断、选择等细分） |
+| **教学内容** | 初级教材、初级讲义、中级教材、中级讲义（按单元组织的课程内容条目） |
 
-## Side Panel
+- 顶部 Tab 切换分类，子 Tab 切换小节
+- 分组标题、维度标签（如"整体 / 个人"、"速度 / 质量"）均可点击插入对应文字
+- 点击任意条目按钮，将对应的完整反馈语句插入到当前编辑器光标处
 
-The Side Panel can be opened by the Ribbon Icon on the left side. If you changed the side (left or right) of the panel in the settings, just hit this butten/icon again and it will reload on the right side.
+### 快捷键命令选择器
 
-### Order and expansion of the Sections
+默认快捷键 `ALT+Q` 打开模糊搜索弹窗，输入关键字即可在全部模板条目中搜索（匹配名称与内容），回车插入到光标位置，全程无需离开键盘。
 
-It is possible to change the order of the sections according to the personal wishes. Furthermore it is possible to expand and shrink every section to keep the overview.
+可在 Obsidian 的快捷键设置中自定义快捷键。
 
-![](assets/OrderableAndExpandableRows.gif)
+## 安装
 
-### Markdown Section
+1. 下载最新的 Release 中的 `main.js`、`manifest.json`、`styles.css`
+2. 在你的 Vault 中创建文件夹：`.obsidian/plugins/obsidian-feedback-assistant/`
+3. 将三个文件放入该文件夹
+4. 在 Obsidian 设置 → 第三方插件中启用 **Feedback Assistant**
 
-![](assets/Panel_Overview.png)
+## 开发
 
-### HTML Section
+```bash
+# 安装依赖
+npm install
 
-![](assets/Panel_Overview_Html.png)
+# 开发模式（监听文件变化）
+npm run dev
 
-### Latex Section
+# 生产构建（输出到 build/ 目录）
+npm run build
+```
 
-> Latex Functions only work if they are in a latex equation section like $...$ or $$...$$.
+## 项目结构
 
-![](assets/Panel_Overview_Latex.png)
+```
+src/
+├── main.ts                  # 插件入口：视图注册、快捷键、设置
+├── SidePanelControlView.ts  # 侧边栏面板 UI
+├── CommandListView.ts       # Alt+Q 模糊搜索弹窗
+├── templates.ts             # 模板数据模型与聚合
+├── templates-class.ts       # 班级类模板
+├── templates-student.ts     # 学员类模板
+├── templates-content.ts     # 教学内容类模板
+├── generalFunctions.ts      # 通用工具函数
+└── icons.ts                 # 自定义图标
+```
 
-### Greek Letters Section
+## 设置
 
-> Greek Letters only work if they are in a latex equation section like $...$ or $$...$$.
+- **Side Pane Side**：侧边栏面板显示在左侧还是右侧（默认右侧）
 
-![](assets/Panel_Overview_Greek_Letters.png)
+## License
 
-### Callouts Section
-
-![](assets/calloutsMenu.jpg)
-
-## Suggestion Window with Shortcut
-
-This plugin does have a default shortcut `ALT+Q` which opens a Suggestion Window with all commands of this plugin (except colors and callouts). Once you get used to it, you want never miss it again. Furthermore, this way there is no need to ever leave your keyboard!
-
-With the default shortcut `ALT-C` a Suggestion Window for Callouts is opened with the same functionality like the common Suggestion Window.
-
-### How it works
-Just press the shortcut/hotkey `ALT+Q` on any place. It doesn't matter if you are on a specific position or selected some text you want to change. Then enter the name of the command you want to apply. After a few letters your wished command should be suggested in the top 5.
-
-![](assets/Suggestion_Window_How_to_use_with_hotkey.gif)
-
-### How to change the shortcut/hotkey
-
-The shortcut/hotkey `ALT+Q` was selected becaus it can be  comfortable reached with just one hand, but you can change it to what ever you want.
-
-![](assets/Suggestion_Window_change_hot_key.gif)
-## Color Picker
-
-### Select a color
-
-The color picker provides an easy and fast workflow to work with colors. If you pick a color with the `Select a Color` button and leave the window (by clicking outside the color picker), the selected color will be inserted at the current courser position. In addition, it will be copied to the clipboard.
-
-### Color History
-
-Furthermore, the color picker saves the history of the last 10 used colors.
-
-### Saved Colors
-
-To Save the current color even if obsidian will be closed, just click the `Save Color` button.
-
-### Sort saved Colors
-
-All saved colors can be sorted via drop a catch.
-
-### Delete a Color
-
-To delete a saved or last used color just click it with the right mouse button.
-
-### Additional Formats
-
-For a even easier handling you can select additional options to what should be added to the color.
-
-#### Options
-
-- Add "color: {your color}"
-  - ex. `color: #ffffff`
-- Add "background-color: {your color}
-  - ex. `background-color: #ffffff`
-- Add tag: "style={your color}
-  - This option is only helpful, if you also select one of both of the other options like:
-  - ex. `style="background-color: #ff0000"`
-- Add HTML: "`<font color={your color}>{selected text}</font>`"
-  - Useful for quickly coloring text.
-  - ex. `<font color="#ffffff">Hello World</font>`
-
-![](assets/Color_Picker.png)
-
-## Settings
-
-- Side Pane Side
-
-  - default: right
-  - options: right, left
-  - Defines the side of the side pane. By default the side pane will open on the right side/leaf.
-
-- Saved Colors
-  - default: ""
-  - options: any hex color. One hex (#ffffff) color per line.
-  - Manages the saved colors. Colors can be added, deleted, edited. The order is also considered.
-
-## Changelog
-- Version: 0.4.1
-  - Added Callouts-Support
-- Version: 0.4.0
-  - Updated the plugin to the new Obsidian API 0.15.x
-  - Replace command language with a suggestion window triggered by a hotkey
-  - Fixed the wrong courser position after use of the header buttons/command (h1,h2, ...)
-- Version: 0.3.2
-  - Additional options for the color picker
-  - New Highlight Button in the Text Edit section and command line
-- Version 0.3.1
-  - Changeable order of the sections
-  - Expandable sections
-  - Corrected the latex `\$\$` and `\$\$\$\$` buttons as they were switched
-- Version 0.3.0
-  - added a Latex and Greek Letters section
-- Version 0.2.2
-  - added /mermaid snipplet to generate mermaid code block - allows drawing diagrams ![](assets/Mermaid.png)
-- Version 0.2.1
-  ⁻ Some Bug Fixes
-  - No input preview mode
-  - Highlighting of the html buttons when hover
-  - Replace selection when insert colors.
-  - Saved Colors can be added and edited in the settings.
-  - New HTML Tags `<details></details>` and `<summary></summary>`
-- Vesion 0.2.0
-  - Added support for HTML snippets in command language and in side pane.
-  - Added a color picker
-- Vesion 0.1.2
-  - Inital plugin
+[MIT](LICENSE)

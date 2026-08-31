@@ -3,8 +3,8 @@
   "name": "Feedback Assistant",
   "version": "0.1.0",
   "minAppVersion": "0.15.6",
-  "description": "A minimal plugin for inserting predefined text snippets via sidebar panel and command selector.",
-  "author": "",
-  "authorUrl": "",
+  "description": "用于教学反馈的 Obsidian 插件，通过侧边栏面板和命令选择器插入预定义的反馈文本片段。",
+  "author": "Schleiden",
+  "authorUrl": "https://github.com/SchleidenLee",
   "isDesktopOnly": false
 }
