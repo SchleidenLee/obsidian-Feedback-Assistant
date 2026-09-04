@@ -2,7 +2,7 @@
 
 一个用于**教学反馈撰写**的 Obsidian 插件。通过侧边栏面板或快捷键命令选择器，一键插入预定义的反馈文本片段，大幅减少重复输入，让老师可以专注于反馈内容本身。
 
-> 本插件基于 [obsidian-markdown-formatting-assistant](https://github.com/Reocin/obsidian-markdown-formatting-assistant-plugin) 改写而来，感谢原作者的工作。
+> 本插件基于 [obsidian-markdown-formatting-assistant](https://github.com/Reocin/obsidian-markdown-formatting-assistant-plugin) 改写而来，仅保留其"点击插入文本"的核心交互，感谢原作者的工作。
 
 ## 功能特性
 
@@ -39,26 +39,34 @@
 # 安装依赖
 npm install
 
-# 开发模式（监听文件变化）
+# 开发模式（监听文件变化，直接输出到本地 Vault 的 .obsidian/plugins/ 目录）
 npm run dev
 
-# 生产构建（输出到 build/ 目录）
+# 生产构建（输出到根目录 dist/）
 npm run build
 ```
 
 ## 项目结构
 
 ```
-src/
-├── main.ts                  # 插件入口：视图注册、快捷键、设置
-├── SidePanelControlView.ts  # 侧边栏面板 UI
-├── CommandListView.ts       # Alt+Q 模糊搜索弹窗
-├── templates.ts             # 模板数据模型与聚合
-├── templates-class.ts       # 班级类模板
-├── templates-student.ts     # 学员类模板
-├── templates-content.ts     # 教学内容类模板
-├── generalFunctions.ts      # 通用工具函数
-└── icons.ts                 # 自定义图标
+├── src/                     # 插件源码
+│   ├── main.ts              # 入口：视图注册、快捷键、设置
+│   ├── SidePanelControlView.ts  # 侧边栏面板 UI
+│   ├── CommandListView.ts   # Alt+Q 模糊搜索弹窗
+│   ├── templates.ts         # 模板数据模型与聚合
+│   ├── templates-class.ts   # 班级类模板
+│   ├── templates-student.ts # 学员类模板
+│   ├── templates-content.ts # 教学内容类模板
+│   ├── generalFunctions.ts  # 通用工具函数
+│   └── icons.ts             # Ribbon 图标
+├── dist/                    # 生产构建输出（main.js / manifest.json / styles.css）
+├── docs/                    # 参考文档
+│   ├── feedback_templates.md    # 反馈模板清单（与 src 模板对照校验）
+│   ├── xmind_templates.md       # 模板结构（从 XMind 还原）
+│   ├── 初级教材.md / 初级讲义.md
+│   └── 中级教材.md / 中级讲义.md
+├── verify_templates.js      # 校验 TS 模板与 MD 文档条目一致
+└── verify_text.js           # 校验 TS 模板与 MD 文档文本一致
 ```
 
 ## 设置

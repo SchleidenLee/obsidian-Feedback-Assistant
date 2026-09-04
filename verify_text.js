@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tsContent = fs.readFileSync('src/templates.ts', 'utf8');
-const mdContent = fs.readFileSync('feedback_templates.md', 'utf8');
+const mdContent = fs.readFileSync('docs/feedback_templates.md', 'utf8');
 
 // Extract text values from TS
 const textRegex = /text: "([^"]+)"/g;
