@@ -4,7 +4,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 
 const exportFolder =
-  '.obsidian/plugins/obsidian-feedback-assistant';
+  '.obsidian/plugins/xdf-feedback-assistant';
 export default {
   input: 'src/main.ts',
 

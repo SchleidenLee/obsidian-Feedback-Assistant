@@ -29,9 +29,9 @@
 ## 安装
 
 1. 下载最新的 Release 中的 `main.js`、`manifest.json`、`styles.css`
-2. 在你的 Vault 中创建文件夹：`.obsidian/plugins/obsidian-feedback-assistant/`
+2. 在你的 Vault 中创建文件夹：`.obsidian/plugins/xdf-feedback-assistant/`
 3. 将三个文件放入该文件夹
-4. 在 Obsidian 设置 → 第三方插件中启用 **Feedback Assistant**
+4. 在 Obsidian 设置 → 第三方插件中启用 **XDF Feedback Assistant**
 
 ## 开发
 
