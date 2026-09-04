@@ -1,6 +1,6 @@
 {
   "name": "obsidian-feedback-assistant",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimal Obsidian plugin for inserting predefined text snippets via sidebar panel and command selector",
   "main": "main.js",
   "scripts": {
