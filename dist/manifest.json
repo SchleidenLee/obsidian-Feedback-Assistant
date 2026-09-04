@@ -1,9 +1,9 @@
 {
   "id": "xdf-feedback-assistant",
   "name": "XDF Feedback Assistant",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minAppVersion": "0.15.6",
-  "description": "用于教学反馈的 Obsidian 插件，通过侧边栏面板和命令选择器插入预定义的反馈文本片段。",
+  "description": "XDF 反馈速写助手：通过侧边栏面板和快捷键一键插入预定义教学反馈模板",
   "author": "Schleiden",
   "authorUrl": "https://github.com/SchleidenLee",
   "isDesktopOnly": false
